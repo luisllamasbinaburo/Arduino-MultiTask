@@ -1,0 +1,28 @@
+#######################################
+# Syntax Coloring Map MultiTask
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+MultiTask	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+Capacity	KEYWORD2
+Count	KEYWORD2
+AddDelay	KEYWORD2
+AddSingle	KEYWORD2
+AddRepetitive	KEYWORD2
+AddContinuous	KEYWORD2
+AddAlternant	KEYWORD2
+AddAlternantContinuous	KEYWORD2
+Update	KEYWORD2
+CancelTask	KEYWORD2
+IsFull	KEYWORD2
+IsEmpty	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
