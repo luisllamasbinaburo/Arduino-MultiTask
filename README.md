@@ -56,9 +56,6 @@ bool IsFull() const;
 bool IsEmpty() const;
 ```
 
-## ToDo
-- [ ] Mejorar la gestión de slots libres.
-
 ## Ejemplos
 La librería MultiTask incluye los siguientes ejemplos para ilustrar su uso.
 
