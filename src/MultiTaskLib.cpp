@@ -12,6 +12,10 @@ Unless required by applicable law or agreed to in writing, software distributed 
 MultiTask::MultiTask(uint8_t capacity)
 {
 	_tasks = new TaskRef[capacity];
+	for (uint8_t index = 0; index < capacity; index++)
+	{
+		_tasks[index] = nullptr;
+	}
 	_capacity = capacity;
 	_count = 0;
 }
@@ -83,15 +87,17 @@ uint8_t MultiTask::AddAlternantContinuous(int time, Action action, Action altern
 
 void MultiTask::Update()
 {
-	for(uint8_t index = 0; index < _count; index++)
+	for(uint8_t index = 0; index < _capacity; index++)
 	{
-		bool finished = updateTask(_tasks[index]);
-
-		if (finished)
+		if (_tasks[index] != nullptr)
 		{
-			Action backCallback = _tasks[index]->callback;
-			removeTask(index);
-			if (backCallback != nullptr) backCallback();
+			bool finished = updateTask(_tasks[index]);
+
+			if (finished)
+			{
+				if (_tasks[index]->callback != nullptr) _tasks[index]->callback();
+				removeTask(index);
+			}
 		}
 	}
 }
@@ -114,14 +120,22 @@ bool MultiTask::IsEmpty() const
 uint8_t MultiTask::addTask(int time, Action action, Action alternateAction, unsigned int repetitions, Action callback)
 {
 	if (IsFull()) return;
-	_tasks[_count] = new Task();
-	_tasks[_count]->time = time;
-	_tasks[_count]->trigger = time + millis();
-	_tasks[_count]->action = action;
-	_tasks[_count]->alternateAction = alternateAction;
-	_tasks[_count]->repetitions = repetitions;
-	_tasks[_count]->callback = callback;
-	_count++;
+
+	for (uint8_t index = 0; index < _capacity; index++)
+	{
+		if (_tasks[index] == nullptr)
+		{
+			_tasks[_count] = new Task();
+			_tasks[_count]->time = time;
+			_tasks[_count]->trigger = time + millis();
+			_tasks[_count]->action = action;
+			_tasks[_count]->alternateAction = alternateAction;
+			_tasks[_count]->repetitions = repetitions;
+			_tasks[_count]->callback = callback;
+			_count++;
+			break;
+		}
+	}
 	return _count;
 }
 
@@ -135,10 +149,10 @@ void MultiTask::rearmTask(TaskRef task, Action action, Action alternateAction, u
 
 void MultiTask::removeTask(uint8_t index)
 {
-	if (index > _count - 1) return;
+	if (index >= _capacity) return;
 
 	delete _tasks[index];
-	memmove(_tasks + index, _tasks + index + 1, (_count - index ) * sizeof(TaskRef));
+	_tasks[index] = nullptr;
 	--_count;
 }
 
