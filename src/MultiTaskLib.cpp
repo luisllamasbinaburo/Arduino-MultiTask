@@ -119,7 +119,7 @@ bool MultiTask::IsEmpty() const
 
 uint8_t MultiTask::addTask(int time, Action action, Action alternateAction, unsigned int repetitions, Action callback)
 {
-	if (IsFull()) return;
+	if (IsFull()) return _count;
 
 	for (uint8_t index = 0; index < _capacity; index++)
 	{
